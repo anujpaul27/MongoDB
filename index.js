@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
 
 const users = [{ id: 1, name: "Ram" }];
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri =
   "mongodb+srv://paulsagar803_db_user:3HNifu7GdYknjr0n@cluster0.hzfwiu4.mongodb.net/?appName=Cluster0";
 
@@ -32,16 +32,26 @@ async function run() {
     await client.connect();
     const collection = client.db('UserDB').collection('user')
 
+    // Read
     app.get("/users", async(req, res) => {
       const user = await collection.find().toArray();
       res.send(user)
     });
 
+    // Create 
     app.post("/users", async(req, res) => {
       const user = req.body;
       const result = await collection.insertOne(user)
       res.send(result)
     });
+
+    // Delete 
+    app.delete('/users/:id', async(req, res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await collection.deleteOne(query)
+      res.send(result)
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
