@@ -36,6 +36,17 @@ function App() {
 
   }
 
+  function handleDelete (_id)
+  {
+    fetch(`http://localhost:5000/users/${_id}`,{
+      method: 'Delete',
+    })
+    .then(res=> res.json())
+    .then(data => {
+      console.log(data);
+    })
+  }
+
   return (
     <>
       <h2>Add User</h2>
@@ -48,10 +59,15 @@ function App() {
         <br />
         <input type="submit" value="Submit" />
       </form>
+
+
       <h2>User Management System </h2>
       {users.map((user) => (
         <p key={user._id}>
           {user._id}, {user.name}
+
+          <button onClick={()=>handleDelete(user._id)}>X</button>
+
         </p>
       ))}
     </>
