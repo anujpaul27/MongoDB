@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require("express")
 const app = express();
 const port = process.env.PORT || 5000;
 const cors = require("cors");
@@ -50,6 +50,29 @@ async function run() {
       const id = req.params.id;
       const query = {_id: new ObjectId(id)}
       const result = await collection.deleteOne(query)
+      res.send(result)
+    })
+
+    // Update 
+    app.get('/users/:id', async(req, res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await collection.findOne(query)
+      res.send(result)
+    })
+
+    // Update-2
+    app.put('/users/:id', async(req,res)=>{
+      const id = req.params.id;
+      const user = req.body;
+      const query = {_id: new ObjectId(id)}
+      const updateUser = {
+        $set: {
+          name: user.name,
+          email: user.email
+        }
+      }
+      const result = await collection.updateOne(query,updateUser)
       res.send(result)
     })
 
